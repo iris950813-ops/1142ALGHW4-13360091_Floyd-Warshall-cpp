@@ -54,6 +54,15 @@ vector<vector<int>> floydWarshall(vector<vector<int>> D) {
     //       若 D[i][k] 和 D[k][j] 都不是 INF
     //       且 D[i][k] + D[k][j] < D[i][j]
     //          更新 D[i][j]
+    for (int k = 0; k < n; k++) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (D[i][k] < INF && D[k][j] < INF && D[i][k] + D[k][j] < D[i][j]) {
+                    D[i][j] = D[i][k] + D[k][j];
+                }
+            }
+        }
+    }
 
     return D;
 }
@@ -81,6 +90,20 @@ int main() {
     // 4 -> 5 = 6
     // 4 -> 6 = 10
     // 5 -> 6 = 8
+    for (int i = 0; i < n; i++) {
+        W[i][i] = 0;
+    }
+
+    W[0][1] = 3;
+    W[0][2] = 5;
+    W[2][1] = -2;
+    W[1][4] = 7;
+    W[2][3] = -5;
+    W[2][4] = -5;
+    W[1][3] = 2;
+    W[3][4] = 6;
+    W[3][5] = 10;
+    W[4][5] = 8;
 
     cout << "Initial distance matrix W:\n";
     printMatrix(W);
