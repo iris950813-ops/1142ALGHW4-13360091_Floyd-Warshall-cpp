@@ -38,27 +38,21 @@ void printMatrix(const vector<vector<int>>& D) {
 // for k = 1 to n
 //   for i = 1 to n
 //     for j = 1 to n
-//       if D[i][k] + D[k][j] < D[i][j]
-//          D[i][j] = D[i][k] + D[k][j]
+//        if D[i][k] + D[k][j] < D[i][j]
+//           D[i][j] = D[i][k] + D[k][j]
 // ==============================
 vector<vector<int>> floydWarshall(vector<vector<int>> D) {
     int n = D.size();
 
-    // TODO:
     // 使用三層迴圈完成 Floyd-Warshall
-    //
-    // 提示：
-    // for k = 0 到 n-1
-    //   for i = 0 到 n-1
-    //     for j = 0 到 n-1
-    //       若 D[i][k] 和 D[k][j] 都不是 INF
-    //       且 D[i][k] + D[k][j] < D[i][j]
-    //          更新 D[i][j]
     for (int k = 0; k < n; k++) {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                if (D[i][k] < INF && D[k][j] < INF && D[i][k] + D[k][j] < D[i][j]) {
-                    D[i][j] = D[i][k] + D[k][j];
+                // 確保兩段路徑都存在（不是 INF），避免溢位並符合演算法邏輯
+                if (D[i][k] < INF && D[k][j] < INF) {
+                    if (D[i][k] + D[k][j] < D[i][j]) {
+                        D[i][j] = D[i][k] + D[k][j];
+                    }
                 }
             }
         }
@@ -76,33 +70,22 @@ int main() {
     // 初始化距離矩陣 W
     vector<vector<int>> W(n, vector<int>(n, INF));
 
-    // TODO:
-    // 1. 將對角線 W[i][i] 設為 0
-    //
-    // 2. 依照題目中的圖加入邊：
-    // 1 -> 2 = 3
-    // 1 -> 3 = 5
-    // 3 -> 2 = -2
-    // 2 -> 5 = 7
-    // 3 -> 4 = -5
-    // 3 -> 5 = -5
-    // 2 -> 4 = 2
-    // 4 -> 5 = 6
-    // 4 -> 6 = 10
-    // 5 -> 6 = 8
+    // 1. 將對角線 W[i][i]設為 0
     for (int i = 0; i < n; i++) {
         W[i][i] = 0;
     }
-    W[0][1] = 3;
-    W[0][2] = 5;
-    W[2][1] = -2;
-    W[1][4] = 7;
-    W[2][3] = -5;
-    W[2][4] = -5;
-    W[1][3] = 2;
-    W[3][4] = 6;
-    W[3][5] = 10;
-    W[4][5] = 8;
+
+    // 2. 依照題目中的圖加入邊（將 1-based 節點轉換為 0-based 索引）
+    W[0][1] = 3;  // 1 -> 2
+    W[0][2] = 5;  // 1 -> 3
+    W[2][1] = -2; // 3 -> 2
+    W[1][4] = 7;  // 2 -> 5
+    W[2][3] = -5; // 3 -> 4
+    W[2][4] = -5; // 3 -> 5
+    W[1][3] = 2;  // 2 -> 4
+    W[3][4] = 6;  // 4 -> 5
+    W[3][5] = 10; // 4 -> 6
+    W[4][5] = 8;  // 5 -> 6
 
     cout << "Initial distance matrix W:\n";
     printMatrix(W);
